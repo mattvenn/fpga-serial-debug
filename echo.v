@@ -78,22 +78,12 @@ always @(posedge clk)
     begin
         tx_strb <= 1'b1;
         case(rxdata)
-        8'h00: txdata <= 8'h00;
-        8'h01: txdata <= leds;
-        8'h02: txdata <= count;
-        default: txdata <= 8'h00;
+            8'h00: txdata <= 8'h00;
+            8'h01: txdata <= leds;
+            8'h02: txdata <= count;
+            default: txdata <= 8'h00;
         endcase
     end else
         tx_strb <= 1'b0;
 
-/*always @(posedge clk)
-    //-- Capturar el dato cuando se reciba
-    if (rcv == 1'b1)
-      leds <= data[3:0]; 
-
-assign act = ~rx;
-*/
 endmodule
-
-
-

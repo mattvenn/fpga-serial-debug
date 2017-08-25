@@ -22,8 +22,36 @@ FPGA. In this basic example we just have 3:
 * read the LED register
 * read the count register (only bottom 8 bits are read)
 
-A python program sends the messages and reads the results. As a bonus the
-results are later formatted into a VCD file that can be displayed with GTKWave.
+Instead of putting the counter incrementers in an always block, they are wrapped
+in clock enabled always block, so the counters only step when a 0x00 data block
+is received:
+
+    always @(posedge clk)
+        logic_ce <= (rcv)&&(rxdata == 8'h00);
+
+    always @(posedge clk)
+        if (logic_ce)
+        begin
+            count <= count + 1;
+            leds <= leds + 1;
+        end
+
+We can also inspect the count and led registers:
+
+    always @(posedge clk)
+        if (rcv)
+        begin
+            tx_strb <= 1'b1;
+            case(rxdata)
+                8'h00: txdata <= 8'h00;
+                8'h01: txdata <= leds;
+                8'h02: txdata <= count;
+                default: txdata <= 8'h00;
+            endcase
+
+A [python program](control.py) sends the messages and reads the results. As a bonus the
+results are later [formatted into a VCD](convert_csv_to_vcd.py) file that can be
+displayed with GTKWave.
 
 # Instructions
 
@@ -38,7 +66,7 @@ results are later formatted into a VCD file that can be displayed with GTKWave.
     make sint2
     make prog
 
-## Run the design
+## Run the debugger
 
     make control
 
@@ -47,7 +75,7 @@ results of the registers every step. The results are exported to dumpvar.csv
 
     make view
 
-converts the dumpvar.csv file to python.vcd then runs GTKWave to show the
+converts the dumpvar.csv file to a vcd then runs GTKWave to show the
 results.
 
 # Resources
