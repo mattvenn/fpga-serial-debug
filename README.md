@@ -32,6 +32,7 @@ is received:
     always @(posedge clk)
         if (logic_ce)
         begin
+            // put any logic you want to debug here
             count <= count + 1;
             leds <= leds + 1;
         end
