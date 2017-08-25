@@ -35,7 +35,7 @@ wire [7:0] txdata;
 //-- Señal de reset
 reg rstn = 0;
 
-reg [16:0] count;
+reg [15:0] count;
 
 //-- Señal de transmisor listo
 wire ready;
