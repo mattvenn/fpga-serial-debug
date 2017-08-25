@@ -57,7 +57,7 @@ control:
 	./control.py
 
 view: dumpvar.csv
-	./gen.py
+	./convert_csv_to_vcd.py
 	gtkwave python.vcd test.gtkw
 
 #-- Limpiar todo
